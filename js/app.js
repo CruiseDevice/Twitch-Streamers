@@ -34,8 +34,42 @@ function showResponse(response){
     url = response._links.channel.substr(38);
     // console.log(url);
     updateOfflineUsers();
-   }
+  }else if(response.status == 422 || response.status == 404){
+    status = response.message;
+    updateHTML(".unavailable");
+  }else{
+    if(response.stream.channel.logo !== null){
+      picture = 'url("'+response.stream.channel.logo+'")';
+    }else{
+
+    }
+    url = response._links.channel.substr(38);
+    status = "<a href='https://twitch.tv/" + url + "' target='_blank'" + "'>" + response.stream.channel.display_name +  "</a>" + " is currently streaming " + response.stream.game;
+    updateHTML(".online");
+  }
 }
 function updateOfflineUsers(){
+  $.ajax({
+    url: 'https://wind-bow.gomix.me/twitch-api/channels/'+url,
+    type: 'GET',
+    dataType: 'jsonp',
+    data: {format: 'json'}
+  })
+  .done(function(response) {
+    console.log(response);
+    status = "Channel " + "'<a href='" + response.url + "' target='_blank'" + "'>" + response.display_name + "</a>'" + " is currently offline";
+    if(response.logo !== null){
+      picture = 'url("'+response.logo+'")';
+    }else{
+
+    }
+    updateHTML(".offline");
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+  });
 
 }
