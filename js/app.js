@@ -1,12 +1,15 @@
 // console.log('working');
 var $streamers = $(".streamers-list");
 var streamers = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+var x = 0;
+
 streamers.forEach(function(streamer){
   ajax(streamer);
 });
 function ajax(streamer){
   console.log(streamer);
   url = "https://wind-bow.gomix.me/twitch-api/streams/" + streamer + "?callback=?",
+  console.log(url);
   $.ajax({
     url: url,
     type: 'GET',
@@ -71,5 +74,29 @@ function updateOfflineUsers(){
   .always(function() {
     console.log("complete");
   });
+
+}
+function updateHTML(section){
+  $(section).html(''                                                  +
+  '<div class="twitch">'                                              +
+    '<div class="row">'                                               +
+      '<div class="one-third column">'                                +
+        '<div class="image-holder" id="user-image-' + x + '">'        +
+        '</div>'                                                      +
+      '</div>'                                                        +
+      '<div class="two-thirds column">'                               +
+        '<span class="status-message">' + status + '</span>'          +
+      '</div>'                                                        +
+    '</div>'                                                          +
+  '</div>');
+  if (section == ".online" || section == ".offline") { //If users are online or offline, load profile images
+			$("#user-image-" + x).css({
+				background: picture,
+				'background-size': '55px'
+			});
+		}
+		x++;
+}
+function updateOfflineUsers(){
 
 }
