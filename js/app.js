@@ -6,6 +6,7 @@ var x = 0;
 streamers.forEach(function(streamer){
   ajax(streamer);
 });
+
 function ajax(streamer){
   console.log(streamer);
   url = "https://wind-bow.gomix.me/twitch-api/streams/" + streamer + "?callback=?",
@@ -44,7 +45,7 @@ function showResponse(response){
     if(response.stream.channel.logo !== null){
       picture = 'url("'+response.stream.channel.logo+'")';
     }else{
-
+      picture = 'url("https://cdn.rawgit.com/ayoisaiah/freeCodeCamp/master/twitch/images/placeholder-2.jpg")';
     }
     url = response._links.channel.substr(38);
     status = "<a href='https://twitch.tv/" + url + "' target='_blank'" + "'>" + response.stream.channel.display_name +  "</a>" + " is currently streaming " + response.stream.game;
@@ -64,7 +65,7 @@ function updateOfflineUsers(){
     if(response.logo !== null){
       picture = 'url("'+response.logo+'")';
     }else{
-
+      picture = 'url("https://cdn.rawgit.com/ayoisaiah/freeCodeCamp/master/twitch/images/placeholder-2.jpg")';
     }
     updateHTML(".offline");
   })
@@ -97,6 +98,23 @@ function updateHTML(section){
 		}
 		x++;
 }
-function updateOfflineUsers(){
-
+function onlineUsers(){ // display online users
+  $(".offline-users, .all-users").removeClass('focus');
+  $(".online-users").addClass('focus');
+  $(".offline, .unavailable").addClass('hidden');
+  $(".online").removeClass('hidden');
+  console.log('working onlineusers');
 }
+function offlineUsers(){
+  console.log('offline users working');
+  $(".online-users,.all-users").removeClass('focus');
+  $(".offline-users").addClass('focus');
+  $(".online, .unavailable").addClass('hidden');
+  $(".offline").removeClass('hidden');
+}
+$(".online-users").click(function(){
+  onlineUsers();
+});
+$(".offline-users").click(function(){
+  offlineUsers();
+});
