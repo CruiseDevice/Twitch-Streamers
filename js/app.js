@@ -1,28 +1,30 @@
-// console.log('working');
 var $streamers = $(".streamers-list");
-var streamers = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+
+//global variables
+var streamers = ["ESL_SC2", "ESL_CSGO", "freecodecamp", "storbeck", "terakilobyte", "habathcx", "RobotCaleb", "thomasballinger", "noobs2ninjas", "beohoff", "brunofin", "comster404", "test_channel", "cretetion", "sheevergaming", "TR7K", "OgamingSC2", "monstercat", "pink_sparkles"];
+
 var x = 0;
 
 streamers.forEach(function(streamer){
   ajax(streamer);
 });
 
+var baseURL = "https://api.twitch.tv/kraken";
+
+function prepareURL(type, streamer){
+  return baseURL + "/" + type + "/" + streamer; 
+}
+
 function ajax(streamer){
-  console.log(streamer);
-  url = "https://wind-bow.gomix.me/twitch-api/streams/" + streamer + "?callback=?",
-  console.log(url);
   $.ajax({
-    url: url,
+    url: prepareURL("streams", streamer),
     type: 'GET',
     dataType: 'jsonp',
-    data: {
-      action: 'query',
-      format:'json'
+    headers:{
+      'Client-ID': '',
     }
   })
   .done(function(response) {
-    // console.log(url);
-    // console.log(response);
     showResponse(response);
   })
   .fail(function() {
@@ -33,10 +35,8 @@ function ajax(streamer){
   });
 }
 function showResponse(response){
-  console.log(response);
   if(response.stream === null){
     url = response._links.channel.substr(38);
-    // console.log(url);
     updateOfflineUsers();
   }else if(response.status == 422 || response.status == 404){
     status = response.message;
@@ -54,13 +54,12 @@ function showResponse(response){
 }
 function updateOfflineUsers(){
   $.ajax({
-    url: 'https://wind-bow.gomix.me/twitch-api/channels/'+url,
+    url: 'https://api.twitch.tv/kraken/streams/'+url,
     type: 'GET',
     dataType: 'jsonp',
     data: {format: 'json'}
   })
   .done(function(response) {
-    console.log(response);
     status = "Channel " + "'<a href='" + response.url + "' target='_blank'" + "'>" + response.display_name + "</a>'" + " is currently offline";
     if(response.logo !== null){
       picture = 'url("'+response.logo+'")';
@@ -103,18 +102,18 @@ function onlineUsers(){ // display online users
   $(".online-users").addClass('focus');
   $(".offline, .unavailable").addClass('hidden');
   $(".online").removeClass('hidden');
-  console.log('working onlineusers');
 }
 function offlineUsers(){
-  console.log('offline users working');
   $(".online-users,.all-users").removeClass('focus');
   $(".offline-users").addClass('focus');
   $(".online, .unavailable").addClass('hidden');
   $(".offline").removeClass('hidden');
 }
 $(".online-users").click(function(){
-  onlineUsers();
+    console.log('online button clicked');
+    onlineUsers();
 });
 $(".offline-users").click(function(){
-  offlineUsers();
+    console.log('offline button closed');
+    offlineUsers();
 });
