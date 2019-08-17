@@ -1,19 +1,4 @@
 .img{
   height: 100px;
-  width: 500px; 
-}
-
-.card{
-    padding:2em;
-}
-
-.card-horizontal {
-    display: flex;
-    flex: 1 1 auto;
-}
-
-.logo{
-    border-radius: 50%;
-    height:100px;
-    width:100px;
+  width: 500px;
 }
