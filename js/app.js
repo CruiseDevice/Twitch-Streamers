@@ -11,6 +11,8 @@ $(document).ready(function(){
     let baseURL = "https://api.twitch.tv/kraken";
     let api_streamers = [];
 
+    var logo = "https://cdn.designbyhumans.com/product_images/p/942272.f56.2e446S7ay1Cm2MjUAAA-650x650-b-p.jpg";
+
     streamers.forEach(function(streamer, index){
         ajax(streamer, index);
     });
@@ -58,7 +60,40 @@ $(document).ready(function(){
         console.log('showall clicked');
         all_section.empty();
         api_streamers.forEach(function(streamer){
-            all_section.append(streamer._links.channel + '\n');
+            console.log(streamer.stream);
+            if(streamer.stream !== null){
+                all_section.append(
+                        '<div class="card">'                                                                            +
+                            '<div class="card-horizontal">'                                                             +
+                                '<div class="img-square-wrapper col-md-4">'                                             +
+                                    "<img class='logo' src="+streamer.stream.channel.logo+">"                           +
+                                '</div>'                                                                                +
+                                '<div class="card-block col-md-5 px-3">'                                                +
+                                    streamer.stream.channel.name                                                        +
+                                    '<br/>'                                                                             +
+                                    '<p>'                                                                               +
+                                        streamer.stream.game + ": " + streamer.stream.channel.status                    +
+                                    '</p>'                                                                              +
+                                '</div>'                                                                                +
+                            '</div>'                                                                                    +  
+                        '</div>'
+                );    
+            }else{
+                all_section.append(
+                        '<div class="card">'                                                                            +
+                            '<div class="card-horizontal">'                                                             +
+                                '<div class="img-square-wrapper col-md-4">'                                             +
+                                    "<img class='logo' src="+logo+">"                                                   + 
+                                '</div>'                                                                                +
+                                '<div class="card-block col-md-5 px-3">'                                                +
+                                    streamer._links.channel.split('/')[5]                                               +
+                                    '<br/>'                                                                             +
+                                    '<p>Offline</p>'                                                                    +
+                                '</div>'                                                                                + 
+                            '</div>'                                                                                    +
+                        '</div>'
+                );
+            }
         });
     }
 
@@ -66,7 +101,22 @@ $(document).ready(function(){
         all_section.empty();
         api_streamers.forEach(function(streamer){
             if(streamer.stream !== null){
-                all_section.append(streamer._links.channel + '\n');
+                all_section.append(
+                    '<div class="card">'                                                                                +
+                        '<div class="card-horizontal">'                                                                 + 
+                            '<div class="img-square-wrapper col-md-4">'                                                 +
+                                "<img class='logo' src="+streamer.stream.channel.logo+">"                               +
+                            '</div>'                                                                                    +
+                            '<div class="card-block col-md-5 px-3">'                                                    + 
+                                streamer.stream.channel.name                                                            +
+                                '<br/>'                                                                                 +
+                                '<p>'                                                                                   + 
+                                    streamer.stream.game + ": "+ streamer.stream.channel.status                         +
+                                '</p>'                                                                                  +
+                            '</div>'                                                                                    +
+                        '</div>'                                                                                        + 
+                    '</div'
+                );
             };
         });
     }
@@ -75,7 +125,20 @@ $(document).ready(function(){
         all_section.empty();
         api_streamers.forEach(function(streamer){
             if(streamer.stream === null){
-                all_section.append(streamer._links.channel + '\n');
+                all_section.append(
+                    '<div class="card">'                                                                                +
+                        '<div class="card-horizontal">'                                                                 +
+                            '<div class="img-square-wrapper col-md-4">'                                                 +
+                                "<img class='logo' src="+logo+">"                                                       +  
+                            '</div>'                                                                                    +
+                            '<div class="card-block col-md-5 px-3">'                                                    +
+                                streamer._links.channel.split('/')[5]                                                   +
+                                '<br/>'                                                                                 +
+                                '<p>Offline</p>'                                                                        +
+                            '</div>'                                                                                    + 
+                        '</div>'                                                                                        +
+                    '</div>'
+                );
             };
         });
     }
